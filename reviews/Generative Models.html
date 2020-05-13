@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<!-- saved from url=(0042)https://openai.com/blog/generative-models/ -->
+<html lang="en" class="js"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script type="text/javascript" async="" src="./Generative Models_files/analytics.js"></script><script async="" src="./Generative Models_files/js"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-71156606-1');
+  </script>
+  
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Generative Models</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <link rel="stylesheet" type="text/css" href="./Generative Models_files/all.css">
+  
+  <script type="text/javascript">document.documentElement.className = 'js';</script>
+  <link rel="shortcut icon" href="https://openai.com/favicon.png" type="image/png">
+    <link rel="canonical" href="https://openai.com/blog/generative-models/">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta property="og:site_name" content="OpenAI">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Generative Models">
+    <meta property="og:description" content="This post describes four projects that share a common theme of enhancing or using generative models, a branch of unsupervised learning techniques in machine learning.">
+    <meta property="og:url" content="https://openai.com/blog/generative-models/">
+    <meta property="og:image" content="https://openai.com/content/images/2019/02/cover-generative-models.jpg">
+    <meta property="article:published_time" content="2016-06-16T21:21:00.000Z">
+    <meta property="article:modified_time" content="2019-03-08T23:58:03.000Z">
+    
+    <meta property="article:publisher" content="https://www.facebook.com/openai.research">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Generative Models">
+    <meta name="twitter:description" content="This post describes four projects that share a common theme of enhancing or using generative models, a branch of unsupervised learning techniques in machine learning.">
+    <meta name="twitter:url" content="https://openai.com/blog/generative-models/">
+    <meta name="twitter:image" content="https://openai.com/content/images/2019/02/cover-generative-models.jpg">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="Andrej Karpathy">
+    <meta name="twitter:label2" content="Filed under">
+    <meta name="twitter:data2" content="">
+    <meta name="twitter:site" content="@openai">
+    <meta property="og:image:width" content="1276">
+    <meta property="og:image:height" content="1696">
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "OpenAI",
+        "url": "https://openai.com/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://openai.com/content/images/2019/05/openai-avatar.png",
+            "width": 60,
+            "height": 60
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "Andrej Karpathy",
+        "url": "https://openai.com/blog/authors/andrej/",
+        "sameAs": []
+    },
+    "headline": "Generative Models",
+    "url": "https://openai.com/blog/generative-models/",
+    "datePublished": "2016-06-16T21:21:00.000Z",
+    "dateModified": "2019-03-08T23:58:03.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://openai.com/content/images/2019/02/cover-generative-models.jpg",
+        "width": 1276,
+        "height": 1696
+    },
+    "description": "This post describes four projects that share a common theme of enhancing or using generative models, a branch of unsupervised learning techniques in machine learning.",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://openai.com/"
+    }
+}
+    </script>
+
+    <script defer="" src="./Generative Models_files/members.min.js"></script>
+    <meta name="generator" content="Ghost 3.15">
+    <link rel="alternate" type="application/rss+xml" title="OpenAI" href="https://openai.com/blog/generative-models/">
+  <link rel="shortcut icon" href="https://openai.com/favicon.png">
+  <link rel="apple-touch-icon" href="https://openai.com/favicon.png">
+<style>.fluidvids {width: 100%; max-width: 100%; position: relative;}.fluidvids-item {position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;}</style></head>
+<body class="browser-chrome os-linux engine-webkit is-nav-fixed is-below-fold">
+  <main>
+    
+<article class="post" id="post-generative-models">
+  
+  <header class="post-header post-header--cover bg-light-warm-gray bg-cover color-white" style="background-image:url(https://cdn.openai.com/research-covers/generative-models/gradient.jpg)">
+  <nav class="nav js-nav" style="position: fixed; top: -65px;">
+  <div class="container">
+    <div class="nav-row row d-flex justify-content-between align-items-center">
+      <div class="col-2">
+        <a href="https://openai.com/" class="nav-symbol fade"><svg id="openai-symbol" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 51 51"><path d="M47.21,20.92a12.65,12.65,0,0,0-1.09-10.38A12.78,12.78,0,0,0,32.36,4.41,12.82,12.82,0,0,0,10.64,9a12.65,12.65,0,0,0-8.45,6.13,12.78,12.78,0,0,0,1.57,15A12.64,12.64,0,0,0,4.84,40.51a12.79,12.79,0,0,0,13.77,6.13,12.65,12.65,0,0,0,9.53,4.25A12.8,12.8,0,0,0,40.34,42a12.66,12.66,0,0,0,8.45-6.13A12.8,12.8,0,0,0,47.21,20.92ZM28.14,47.57a9.46,9.46,0,0,1-6.08-2.2l.3-.17,10.1-5.83a1.68,1.68,0,0,0,.83-1.44V23.69l4.27,2.47a.15.15,0,0,1,.08.11v11.8A9.52,9.52,0,0,1,28.14,47.57ZM7.72,38.85a9.45,9.45,0,0,1-1.13-6.37l.3.18L17,38.49a1.63,1.63,0,0,0,1.65,0L31,31.37V36.3a.17.17,0,0,1-.07.13L20.7,42.33A9.51,9.51,0,0,1,7.72,38.85Zm-2.66-22a9.48,9.48,0,0,1,5-4.17v12a1.62,1.62,0,0,0,.82,1.43L23.17,33.2,18.9,35.67a.16.16,0,0,1-.15,0L8.54,29.78A9.52,9.52,0,0,1,5.06,16.8ZM40.14,25,27.81,17.84l4.26-2.46a.16.16,0,0,1,.15,0l10.21,5.9A9.5,9.5,0,0,1,41,38.41v-12A1.67,1.67,0,0,0,40.14,25Zm4.25-6.39-.3-.18L34,12.55a1.64,1.64,0,0,0-1.66,0L20,19.67V14.74a.14.14,0,0,1,.06-.13L30.27,8.72a9.51,9.51,0,0,1,14.12,9.85ZM17.67,27.35,13.4,24.89a.17.17,0,0,1-.08-.12V13a9.51,9.51,0,0,1,15.59-7.3l-.3.17-10.1,5.83a1.68,1.68,0,0,0-.83,1.44Zm2.32-5,5.5-3.17L31,22.35v6.34l-5.49,3.17L20,28.69Z"></path></svg></a>
+      </div>
+      <div class="col" hidden="">
+        <a href="https://openai.com/" class="nav-wordmark fade"><svg id="openai-wordmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 180"><path d="M410.22,41.09c-13.75,0-23.57,4.7-28.39,13.59l-2.59,4.79V43.41h-22.4v97.85H380.4V83.05c0-13.91,7.55-21.89,20.73-21.89,12.56,0,19.76,7.76,19.76,21.31v58.79h23.56v-63C444.45,55,431.65,41.09,410.22,41.09ZM296,41.09c-27.79,0-45.06,17.33-45.06,45.25v13.74c0,26.83,17.42,43.51,45.45,43.51,18.74,0,31.88-6.88,40.15-21l-14.61-8.39c-6.11,8.15-15.86,13.19-25.54,13.19-14.19,0-22.67-8.76-22.67-23.44v-3.89h65.79V83.82c0-26-17.08-42.73-43.51-42.73Zm22.08,43.14H273.72V81.89c0-16.12,7.91-25,22.28-25,13.83,0,22.08,8.76,22.08,23.44ZM678.32,27.3V8.58H596.87V27.3h28.56v95.25H596.87v18.71h81.45V122.55H649.76V27.3ZM60.67,5.87c-36.39,0-59,22.68-59,59.18V84.79c0,36.51,22.6,59.18,59,59.18s59-22.67,59-59.18V65.05C119.66,28.55,97.05,5.87,60.67,5.87ZM95.33,86.14c0,24.24-12.63,38.15-34.66,38.15S26,110.38,26,86.14V63.7c0-24.24,12.63-38.15,34.66-38.15S95.32,39.46,95.32,63.7Zm98.31-45c-12.36,0-23.07,5.11-28.64,13.69l-2.54,3.9V43.41H140.07V174.93h23.55V127.3l2.53,3.74c5.3,7.85,15.65,12.55,27.68,12.55,20.31,0,40.8-13.28,40.8-42.93V84c0-21.35-12.63-42.91-41-42.91Zm17.44,58.4c0,15.77-9.2,25.57-24,25.57-13.8,0-23.44-10.35-23.44-25.18V85.23c0-15.06,9.72-25.57,23.63-25.57,14.7,0,23.83,9.8,23.83,25.57ZM509.55,8.63,462,141.26h23.9l9.1-28.44h54.65l.09.28,9,28.16h23.93L535.08,8.58Zm-8.67,85.52L522.32,27l21.23,67.07Z"></path></svg></a>
+      </div>
+      <div class="col-auto">
+        <ul class="nav-items d-none d-desktop-flex justify-content-end small-caps">
+                        
+            <li class="nav-item">
+              <a class="fade" href="https://openai.com/about/">About</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="fade" href="https://openai.com/progress/">Progress</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="fade" href="https://openai.com/resources/">Resources</a>
+            </li>
+            
+            <li class="nav-item">
+              <a class="fade" href="https://openai.com/blog/">Blog</a>
+            </li>
+        </ul>
+        <button class="nav-toggle nav-toggle--open js-mobile-nav-open fade d-desktop-none"><svg id="mobile-nav-open" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22,13H2a1,1,0,0,1,0-2H22a1,1,0,0,1,0,2Z"></path><path d="M22,6H2A1,1,0,0,1,2,4H22a1,1,0,0,1,0,2Z"></path><path d="M22,20H2a1,1,0,0,1,0-2H22a1,1,0,0,1,0,2Z"></path></svg></button>
+      </div>
+    </div>
+  </div>
+</nav><nav class="nav js-nav" aria-hidden="true" style="visibility: hidden;"></nav>
+<nav class="mobile-nav js-mobile-nav text-left">
+  <div class="container">
+    <div class="nav-row row d-flex justify-content-between align-items-center">
+      <div class="col-2">
+      </div>
+      <div class="col-auto">
+        <button class="nav-toggle nav-toggle--close js-mobile-nav-close"><svg id="mobile-nav-close" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path id="Glyph" d="M19.77,5.63,13.41,12l6.36,6.37a1,1,0,0,1-1.41,1.41L12,13.41,5.63,19.77a1,1,0,0,1-1.44-1.39l0,0L10.58,12,4.21,5.63a1,1,0,0,1,0-1.42,1,1,0,0,1,1.41,0l0,0L12,10.58l6.37-6.37a1,1,0,0,1,1.41,0A1,1,0,0,1,19.77,5.63Z"></path></svg></button>
+      </div>
+    </div>
+  </div>
+  <div class="container font-large">
+    <ul class="mt-0.25 small-caps">
+                
+          <li>
+            <a class="fade d-block py-0.75" href="https://openai.com/about/">About</a>
+          </li>
+          <hr class="bg-fg">
+        
+          <li>
+            <a class="fade d-block py-0.75" href="https://openai.com/progress/">Progress</a>
+          </li>
+          <hr class="bg-fg">
+        
+          <li>
+            <a class="fade d-block py-0.75" href="https://openai.com/resources/">Resources</a>
+          </li>
+          <hr class="bg-fg">
+        
+          <li>
+            <a class="fade d-block py-0.75" href="https://openai.com/blog/">Blog</a>
+          </li>
+          <hr class="bg-fg">
+      <li>
+        <a class="fade d-block py-0.75" href="https://openai.com/jobs/">Jobs</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+
+  
+  <div class="container">
+    <hr class="mb-1 js-nav-fold hr-strong">
+    <div class="row mb-2">
+      <div class="col-12">
+        <div class="row">
+          <div class="col-9 col-sm-8 col-md-5 col-xl-4 offset-xl-1">
+            
+<figure class="release-cover mb-1 rounded shadowed-heavy mb-0">
+  <div class="position-relative bg-light-warm-gray" style="padding-bottom:132.915360502%">
+      <img class="position-absolute trbl-0 js-lazy js-lazy-loaded" src="./Generative Models_files/2x-no-mark.jpg" alt="Generative Models">
+  </div>
+</figure>
+
+
+          </div>
+          <div class="col-12 col-md-7 col-xl-6">
+            <div class="h-100 d-flex flex-column justify-content-between last-child-mb-1">
+                  <div>
+                      <h1 class="balance-text mb-0.5" style="">Generative Models</h1>
+                      <div class="post-excerpt medium-copy mb-0.5 color-fg-80 color-current js-excerpt-container js-widow"><p>This post describes <a href="https://openai.com/blog/generative-models/#contributions">four projects</a> that share a common theme of enhancing or using generative models, a branch of <a href="https://www.quora.com/What-is-the-difference-between-supervised-and-unsupervised-learning-algorithms" target="_blank" rel="noopener">unsupervised learning</a> techniques in machine learning. In addition to describing our work, this post will tell you a bit more about generative models: what they are, why they are important, and where they might be&nbsp;going.</p></div>
+                  </div>
+                    <div class="xsmall-caps color-fg-40 mt-0.25 mb-1 color-current">
+    <time datetime="2016-06-16">June 16, 2016</time>
+    <div class="reading-time">12 minute read</div>
+  </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+</header>
+
+  <section class="container">
+  <div class="row">
+    <section class="content">
+      <!--kg-card-begin: markdown-->
+<p>One of our core aspirations at OpenAI is to develop algorithms and techniques that endow computers with an understanding of our&nbsp;world.</p>
+<p>It’s easy to forget just how much you know about the world: you understand that it is made up of 3D environments, objects that move, collide, interact; people who walk, talk, and think; animals who graze, fly, run, or bark; monitors that display information encoded in language about the weather, who won a basketball game, or what happened in&nbsp;1970.</p>
+<p>This tremendous amount of information is out there and to a large extent easily accessible — either in the physical world of atoms or the digital world of bits. The only tricky part is to develop models and algorithms that can analyze and understand this treasure trove of&nbsp;data.</p>
+<p><strong>Generative models are one of the most promising approaches towards this goal</strong>. To train a generative model we first collect a large amount of data in some domain (e.g., think millions of images, sentences, or sounds, etc.) and then train a model to generate data like it. The intuition behind this approach follows a famous quote from <a href="https://en.wikipedia.org/wiki/Richard_Feynman" target="_blank" rel="noopener">Richard&nbsp;Feynman</a>:</p>
+<blockquote><p>“What I cannot create, I do not&nbsp;understand.”</p><cite>—Richard Feynman</cite></blockquote>
+<p>The trick is that the neural networks we use as generative models have a number of parameters significantly smaller than the amount of data we train them on, so the models are forced to discover and efficiently internalize the essence of the data in order to generate&nbsp;it.</p>
+<p>Generative models have many short-term <a href="https://openai.com/blog/generative-models/#going-forward">applications</a>. But in the long run, they hold the potential to automatically learn the natural features of a dataset, whether categories or dimensions or something else&nbsp;entirely.</p>
+<hr>
+<h2 id="generatingimages">Generating images</h2>
+<p>Let’s make this more concrete with an example. Suppose we have some large collection of images, such as the 1.2 million images in the <a href="http://www.image-net.org/" target="_blank" rel="noopener">ImageNet</a> dataset (but keep in mind that this could eventually be a large collection of images or videos from the internet or robots). If we resize each image to have width and height of 256 (as is commonly done), our dataset is one large <code>1,200,000x256x256x3</code> (about 200GB) block of pixels. Here are a few example images from this&nbsp;dataset:</p>
+<p><img src="./Generative Models_files/gen_models_img_1.jpg" alt=""></p>
+<p>These images are examples of what our visual world looks like and we refer to these as “samples from the true data distribution”. We now construct our generative model which we would like to train to generate images like this from scratch. Concretely, a generative model in this case could be one large neural network that outputs images and we refer to these as “samples from the&nbsp;model”.</p>
+<hr>
+<h2>DCGAN</h2>
+<p>One such recent model is the <a href="https://github.com/Newmu/dcgan_code" target="_blank" rel="noopener">DCGAN network</a> from Radford et al. (shown below). This network takes as input 100 random numbers drawn from a <a href="https://en.wikipedia.org/wiki/Uniform_distribution_(continuous)" target="_blank" rel="noopener">uniform distribution</a> (we refer to these as a <em>code</em>, or <em>latent variables</em>, in red) and outputs an image (in this case <code>64x64x3</code> images on the right, in green). As the code is changed incrementally, the <a href="https://github.com/Newmu/dcgan_code#walking-from-one-point-to-another-in-bedroom-latent-space" target="_blank" rel="noopener">generated images</a> do too — this shows the model has learned features to describe how the world looks, rather than just memorizing some&nbsp;examples.</p>
+<p>The network (in yellow) is made up of standard <a href="http://cs231n.github.io/convolutional-networks/" target="_blank" rel="noopener">convolutional neural network</a> components, such as <a href="http://datascience.stackexchange.com/questions/6107/what-are-deconvolutional-layers" target="_blank" rel="noopener">deconvolutional layers</a> (reverse of convolutional layers), <a href="http://cs231n.github.io/convolutional-networks/#fc" target="_blank" rel="noopener">fully connected layers</a>,&nbsp;etc.:</p>
+<img class="p-0.5" src="./Generative Models_files/gen_models_diag_1.svg">
+<p>DCGAN is initialized with random weights, so a random code plugged into the network would generate a completely random image. However, as you might imagine, the network has millions of parameters that we can tweak, and the goal is to find a setting of these parameters that makes samples generated from random codes look like the training data. Or to put it another way, we want the model distribution to match the true data distribution in the space of&nbsp;images.</p>
+<hr>
+<h2 id="trainingagenerativemodel">Training a generative model</h2>
+<p>Suppose that we used a newly-initialized network to generate 200 images, each time starting with a different random code. The question is: how should we adjust the network’s parameters to encourage it to produce slightly more believable samples in the future? Notice that we’re not in a simple supervised setting and don’t have any explicit <em>desired targets</em> for our 200 generated images; we merely want them to look real. One clever approach around this problem is to follow the <a href="http://arxiv.org/abs/1406.2661" target="_blank" rel="noopener">Generative Adversarial Network (GAN)</a> approach. Here we introduce a second <em>discriminator</em> network (usually a standard convolutional neural network) that tries to classify if an input image is real or generated. For instance, we could feed the 200 generated images and 200 real images into the discriminator and train it as a standard classifier to distinguish between the two sources. But in addition to that — and here’s the trick — we can also <a href="http://neuralnetworksanddeeplearning.com/chap2.html" target="_blank" rel="noopener">backpropagate</a> through both the discriminator and the generator to find how we should change the generator’s parameters to make its 200 samples slightly more confusing for the discriminator. These two networks are therefore locked in a battle: the discriminator is trying to distinguish real images from fake images and the generator is trying to create images that make the discriminator think they are real. In the end, the generator network is outputting images that are indistinguishable from real images for the&nbsp;discriminator.</p>
+<p>There are a few other approaches to matching these distributions which we will discuss briefly below. But before we get there below are two animations that show samples from a generative model to give you a visual sense for the training process.<br>
+In both cases the samples from the generator start out noisy and chaotic, and over time converge to have more plausible image&nbsp;statistics:</p>
+<div>
+  <div class="row">
+    <figure class="col">
+      <img class="w-100" src="./Generative Models_files/gen_models_anim_1.gif">
+      <figcaption><a href="https://openai.com/blog/generative-models/#vae">VAE</a> learning to generate images (log time)</figcaption>
+    </figure>
+    <figure class="col">
+      <img class="w-100" src="./Generative Models_files/gen_models_anim_2.gif">
+      <figcaption><a href="https://openai.com/blog/generative-models/#gan">GAN</a> learning to generate images (linear time)</figcaption>
+    </figure>
+  </div>
+</div>
+<p>This is exciting — these neural networks are learning what the visual world looks like! These models usually have only about 100 million parameters, so a network trained on ImageNet has to (lossily) <a href="http://prize.hutter1.net/" target="_blank" rel="noopener">compress</a> 200GB of pixel data into 100MB of weights. This incentivizes it to discover the most salient features of the data: for example, it will likely learn that pixels nearby are likely to have the same color, or that the world is made up of horizontal or vertical edges, or blobs of different colors. Eventually, the model may discover many more complex regularities: that there are certain types of backgrounds, objects, textures, that they occur in certain likely arrangements, or that they transform in certain ways over time in videos,&nbsp;etc.</p>
+<hr>
+<h2 id="moregeneralformulation">More general formulation</h2>
+<p>Mathematically, we think about a dataset of examples <span><span class="katex" data-src="x_1, \ldots, x_n"><span class="katex-mathml"><math><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><msub><mi>x</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">x_1, \ldots, x_n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.625em; vertical-align: -0.19444em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.301108em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="minner">…</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mpunct">,</span><span class="mspace" style="margin-right: 0.166667em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.151392em;"><span class="" style="top: -2.55em; margin-left: 0em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span></span></span></span></span> as samples from a true data distribution <span><span class="katex" data-src="p(x)"><span class="katex-mathml"><math><semantics><mrow><mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">p(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord mathdefault">p</span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mclose">)</span></span></span></span></span>. In the example image below, the blue region shows the part of the image space that, with a high probability (over some threshold) contains real images, and black dots indicate our data points (each is one image in our dataset). Now, our model also describes a distribution <span><span class="katex" data-src="\hat{p}_{\theta}(x)"><span class="katex-mathml"><math><semantics><mrow><msub><mover accent="true"><mi>p</mi><mo>^</mo></mover><mi>θ</mi></msub><mo>(</mo><mi>x</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">\hat{p}_{\theta}(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord"><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.69444em;"><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="mord"><span class="mord mathdefault">p</span></span></span><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="accent-body" style="left: -0.16666em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.19444em;"><span class=""></span></span></span></span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.336108em;"><span class="" style="top: -2.55em; margin-right: 0.05em;"><span class="pstrut" style="height: 2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight" style="margin-right: 0.02778em;">θ</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.15em;"><span class=""></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mclose">)</span></span></span></span></span> (green) that is defined implicitly by taking points from a unit <a href="https://en.wikipedia.org/wiki/Normal_distribution" target="_blank" rel="noopener">Gaussian distribution</a> (red) and mapping them through a (deterministic) neural network — our generative model (yellow). Our network is a function with parameters <span><span class="katex" data-src="\theta"><span class="katex-mathml"><math><semantics><mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">\theta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.69444em; vertical-align: 0em;"></span><span class="mord mathdefault" style="margin-right: 0.02778em;">θ</span></span></span></span></span>, and tweaking these parameters will tweak the generated distribution of images. Our goal then is to find parameters <span><span class="katex" data-src="\theta"><span class="katex-mathml"><math><semantics><mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">\theta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.69444em; vertical-align: 0em;"></span><span class="mord mathdefault" style="margin-right: 0.02778em;">θ</span></span></span></span></span> that produce a distribution that closely matches the true data distribution (for example, by having a small <a href="https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence" target="_blank" rel="noopener">KL divergence</a> <a href="https://en.wikipedia.org/wiki/Loss_function" target="_blank" rel="noopener">loss</a>). Therefore, you can imagine the green distribution starting out random and then the training process iteratively changing the parameters <span><span class="katex" data-src="\theta"><span class="katex-mathml"><math><semantics><mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">\theta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 0.69444em; vertical-align: 0em;"></span><span class="mord mathdefault" style="margin-right: 0.02778em;">θ</span></span></span></span></span> to stretch and squeeze it to better match the blue&nbsp;distribution.</p>
+<img class="p-0.5" src="./Generative Models_files/gen_models_diag_2.svg">
+<hr>
+<h2 id="threeapproachestogenerativemodels">Three approaches to generative models</h2>
+<p>Most generative models have this basic setup, but differ in the details. Here are three popular examples of generative model approaches to give you a sense of the&nbsp;variation:</p>
+<ul>
+<li><a href="http://arxiv.org/abs/1406.2661" target="_blank" rel="noopener">Generative Adversarial Networks (GANs)</a>, which we already discussed above, pose the training process as a game between two separate networks: a generator network (as seen above) and a second discriminative network that tries to classify samples as either coming from the true distribution <span><span class="katex" data-src="p(x)"><span class="katex-mathml"><math><semantics><mrow><mi>p</mi><mo>(</mo><mi>x</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">p(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord mathdefault">p</span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mclose">)</span></span></span></span></span> or the model distribution <span><span class="katex" data-src="\hat{p}(x)"><span class="katex-mathml"><math><semantics><mrow><mover accent="true"><mi>p</mi><mo>^</mo></mover><mo>(</mo><mi>x</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">\hat{p}(x)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height: 1em; vertical-align: -0.25em;"></span><span class="mord accent"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height: 0.69444em;"><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="mord"><span class="mord mathdefault">p</span></span></span><span class="" style="top: -3em;"><span class="pstrut" style="height: 3em;"></span><span class="accent-body" style="left: -0.16666em;">^</span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height: 0.19444em;"><span class=""></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">x</span><span class="mclose">)</span></span></span></span></span>. Every time the discriminator notices a difference between the two distributions the generator adjusts its parameters slightly to make it go away, until at the end (in theory) the generator exactly reproduces the true data distribution and the discriminator is guessing at random, unable to find a&nbsp;difference.</li>
+<li><a href="https://arxiv.org/abs/1312.6114" target="_blank" rel="noopener">Variational Autoencoders (VAEs)</a> allow us to formalize this problem in the framework of <a href="https://en.wikipedia.org/wiki/Graphical_model" target="_blank" rel="noopener">probabilistic graphical models</a> where we are maximizing a <a href="https://en.wikipedia.org/wiki/Variational_Bayesian_methods" target="_blank" rel="noopener">lower bound</a> on the log likelihood of the&nbsp;data.</li>
+<li>Autoregressive models such as <a href="http://arxiv.org/abs/1601.06759" target="_blank" rel="noopener">PixelRNN</a> instead train a network that models the conditional distribution of every individual pixel given previous pixels (to the left and to the top). This is similar to plugging the pixels of the image into a <a href="http://karpathy.github.io/2015/05/21/rnn-effectiveness/" target="_blank" rel="noopener">char-rnn</a>, but the RNNs run both horizontally and vertically over the image instead of just a 1D sequence of&nbsp;characters.</li>
+</ul>
+<p>All of these approaches have their pros and cons. For example, Variational Autoencoders allow us to perform both learning and efficient Bayesian inference in sophisticated probabilistic graphical models with latent variables (e.g. see <a href="https://arxiv.org/abs/1502.04623" target="_blank" rel="noopener">DRAW</a>, or <a href="http://arxiv.org/abs/1603.08575" target="_blank" rel="noopener">Attend Infer Repeat</a> for hints of recent relatively complex models). However, their generated samples tend to be slightly blurry. GANs currently generate the sharpest images but they are more difficult to optimize due to unstable training dynamics. PixelRNNs have a very simple and stable training process (<a href="https://en.wikipedia.org/wiki/Softmax_function" target="_blank" rel="noopener">softmax loss</a>) and currently give the best log likelihoods (that is, plausibility of the generated data). However, they are relatively inefficient during sampling and don’t easily provide simple low-dimensional <em>codes</em> for images. All of these models are active areas of research and we are eager to see how they develop in the&nbsp;future!</p>
+<hr>
+<p><a name="contributions"></a></p>
+<h2 id="ourrecentcontributions">Our recent contributions</h2>
+<p>We’re quite excited about generative models at OpenAI, and have just released four projects that advance the state of the art. For each of these contributions we are also releasing a technical report and source&nbsp;code.</p>
+<p><a href="https://arxiv.org/abs/1606.03498" target="_blank" rel="noopener"><strong>Improving GANs</strong></a> (<a href="https://github.com/openai/improved-gan" target="_blank" rel="noopener">code</a>). First, as mentioned above GANs are a very promising family of generative models because, unlike other methods, they produce very clean and sharp images and learn codes that contain valuable information about these textures. However, GANs are formulated as a game between two networks and it is important (and tricky!) to keep them in balance: for example, they can oscillate between solutions, or the generator has a tendency to collapse. In this work, Tim Salimans, Ian Goodfellow, Wojciech Zaremba and colleagues have introduced a few new techniques for making GAN training more stable. These techniques allow us to scale up GANs and obtain nice <code>128x128</code> ImageNet&nbsp;samples:</p>
+<div>
+  <div class="row">
+    <figure class="col">
+      <img class="w-100" src="./Generative Models_files/gen_models_img_2.jpg">
+      <figcaption>Real images (ImageNet)</figcaption>
+    </figure>
+    <figure class="col">
+      <img class="w-100" src="./Generative Models_files/gen_models_img_3.jpg">
+      <figcaption>Generated images</figcaption>
+    </figure>
+  </div>
+</div>
+<p>Our <a href="https://www.cs.toronto.edu/~kriz/cifar.html" target="_blank" rel="noopener">CIFAR-10</a> samples also look very sharp - Amazon Mechanical Turk workers can distinguish our samples from real data with an error rate of 21.3% (50% would be random&nbsp;guessing):</p>
+<div>
+  <div class="row">
+    <figure class="col">
+      <img class="w-100" src="./Generative Models_files/gen_models_img_4.jpg">
+      <figcaption>Real images (CIFAR-10)</figcaption>
+    </figure>
+    <figure class="col">
+      <img class="w-100" src="./Generative Models_files/gen_models_img_5.jpg">
+      <figcaption>Generated images</figcaption>
+    </figure>
+  </div>
+</div>
+<p>In addition to generating pretty pictures, we introduce an approach for <a href="https://en.wikipedia.org/wiki/Semi-supervised_learning" target="_blank" rel="noopener">semi-supervised learning</a> with GANs that involves the discriminator producing an additional output indicating the label of the input. This approach allows us to obtain state of the art results on <a href="http://yann.lecun.com/exdb/mnist/" target="_blank" rel="noopener">MNIST</a>, <a href="http://ufldl.stanford.edu/housenumbers/" target="_blank" rel="noopener">SVHN</a>, and CIFAR-10 in settings with very few <a href="http://stackoverflow.com/questions/19170603/what-is-the-difference-between-labeled-and-unlabeled-data" target="_blank" rel="noopener">labeled examples</a>. On MNIST, for example, we achieve 99.14% accuracy with only 10 labeled examples per class with a fully connected neural network — a result that’s very close to the best known results with fully supervised approaches using all 60,000 labeled examples. This is very promising because labeled examples can be quite expensive to obtain in&nbsp;practice.</p>
+<p>Generative Adversarial Networks are a relatively new model (introduced only two years ago) and we expect to see more rapid progress in further improving the stability of these models during&nbsp;training.</p>
+<p><a href="http://arxiv.org/abs/1606.04934" target="_blank" rel="noopener"><strong>Improving VAEs</strong></a> (<a href="http://github.com/openai/iaf" target="_blank" rel="noopener">code</a>). In this work Durk Kingma and Tim Salimans introduce a flexible and computationally scalable method for improving the accuracy of <a href="https://www.cs.jhu.edu/~jason/tutorials/variational.html" target="_blank" rel="noopener">variational inference</a>. In particular, most VAEs have so far been trained using crude <a href="http://www.cs.princeton.edu/courses/archive/spr06/cos598C/papers/chapter2.pdf" target="_blank" rel="noopener">approximate posteriors</a>, where every latent variable is independent. <a href="http://arxiv.org/abs/1505.05770" target="_blank" rel="noopener">Recent extensions</a> have addressed this problem by conditioning each latent variable on the others before it in a chain, but this is computationally inefficient due to the introduced sequential dependencies. The core contribution of this work, termed <em>inverse autoregressive flow</em> (IAF), is a new approach that, unlike previous work, allows us to parallelize the computation of rich approximate posteriors, and make them almost arbitrarily&nbsp;flexible.</p>
+<p>We show some example <code>32x32</code> image samples from the model in the image below, on the right. On the left are earlier samples from the <a href="https://arxiv.org/abs/1502.04623" target="_blank" rel="noopener">DRAW</a> model for comparison (vanilla VAE samples would look even worse and more blurry). The DRAW model was published only one year ago, highlighting again the rapid progress being made in training generative&nbsp;models.</p>
+<div>
+  <div class="row">
+    <figure class="col">
+      <img class="w-100" src="./Generative Models_files/gen_models_img_6.jpg">
+      <figcaption>Generated from a DRAW model</figcaption>
+    </figure>
+    <figure class="col">
+      <img class="w-100" src="./Generative Models_files/gen_models_img_7.jpg">
+      <figcaption>Generated from a VAE trained with IAF</figcaption>
+    </figure>
+  </div>
+</div>
+<p><a href="https://arxiv.org/abs/1606.03657" target="_blank" rel="noopener"><strong>InfoGAN</strong></a> (<a href="https://github.com/openai/InfoGAN" target="_blank" rel="noopener">code</a>). Peter Chen and colleagues introduce InfoGAN — an extension of GAN that learns disentangled and interpretable representations for images. A regular GAN achieves the objective of reproducing the data distribution in the model, but the layout and organization of the code space is <em>underspecified</em> — there are many possible solutions to mapping the unit Gaussian to images and the one we end up with might be intricate and highly entangled. The InfoGAN imposes additional structure on this space by adding new objectives that involve maximizing the <a href="https://en.wikipedia.org/wiki/Mutual_information" target="_blank" rel="noopener">mutual information</a> between small subsets of the representation variables and the observation. This approach provides quite remarkable results. For example, in the images of 3D faces below we vary one continuous dimension of the code, keeping all others fixed. It’s clear from the five provided examples (along each row) that the resulting dimensions in the code capture interpretable dimensions, and that the model has perhaps <em>understood</em> that there are camera angles, facial variations, etc., without having been told that these features exist and are&nbsp;important:</p>
+<div>
+  <div class="row">
+    <figure class="col-6">
+      <img class="w-100" src="./Generative Models_files/infogan_1.jpg">
+      <figcaption>(a) Azimuth (pose)</figcaption>
+    </figure>
+    <figure class="col-6">
+      <img class="w-100" src="./Generative Models_files/ingogan_2.jpg">
+      <figcaption>(b) Elevation</figcaption>
+    </figure>
+    <figure class="col-6">
+      <img class="w-100" src="./Generative Models_files/infogan_3.jpg">
+      <figcaption>(c) Lighting</figcaption>
+    </figure>
+    <figure class="col-6">
+      <img class="w-100" src="./Generative Models_files/infogan_4.jpg">
+      <figcaption>(d) Wide or Narrow</figcaption>
+    </figure>
+  </div>
+</div>
+<p>We also note that nice, disentangled representations have been achieved before (such as with <a href="https://arxiv.org/abs/1503.03167" target="_blank" rel="noopener">DC-IGN</a> by Kulkarni et al.), but these approaches rely on additional supervision, while our approach is entirely&nbsp;unsupervised.</p>
+<hr>
+<p>The next two recent projects are in a <a href="https://en.wikipedia.org/wiki/Reinforcement_learning" target="_blank" rel="noopener">reinforcement learning</a> (RL) setting (another area of <a href="https://openai.com/blog/openai-gym-beta/">focus</a> at OpenAI), but they both involve a generative model&nbsp;component.</p>
+<p><a href="http://arxiv.org/abs/1605.09674" target="_blank" rel="noopener"><strong>Curiosity-driven Exploration in Deep Reinforcement Learning via Bayesian Neural Networks</strong></a> (<a href="https://github.com/openai/vime" target="_blank" rel="noopener">code</a>). Efficient exploration in high-dimensional and continuous spaces is presently an unsolved challenge in reinforcement learning. Without effective exploration methods our agents <a href="http://karpathy.github.io/2016/05/31/rl/" target="_blank" rel="noopener">thrash around</a> until they randomly stumble into rewarding situations. This is sufficient in many simple toy tasks but inadequate if we wish to apply these algorithms to complex settings with high-dimensional action spaces, as is common in robotics. In this paper, Rein Houthooft and colleagues propose VIME, a practical approach to exploration using uncertainty on generative models. VIME makes the agent self-motivated; it actively seeks out surprising state-actions. We show that VIME can improve a range of <a href="https://en.wikipedia.org/wiki/Reinforcement_learning#Direct_policy_search" target="_blank" rel="noopener">policy search</a> methods and makes significant progress on more realistic tasks with sparse rewards (e.g. scenarios in which the agent has to learn locomotion primitives without any&nbsp;guidance).</p>
+<div>
+  <div class="row">
+    <figure class="col">
+      <img class="w-100" src="./Generative Models_files/policy_search_1.gif">
+      <figcaption>Policy trained with VIME</figcaption>
+    </figure>
+    <figure class="col">
+      <img class="w-100" src="./Generative Models_files/policy_search_2.gif">
+      <figcaption>Policy trained with naive exploration</figcaption>
+    </figure>
+  </div>
+</div>
+<p>Finally, we would like to include a bonus fifth project: <a href="http://arxiv.org/abs/1606.03476" target="_blank" rel="noopener"><strong>Generative Adversarial Imitation Learning</strong></a> (<a href="https://github.com/openai/imitation" target="_blank" rel="noopener">code</a>), in which Jonathan Ho and colleagues present a new approach for <em>imitation learning</em>. Jonathan Ho is joining us at OpenAI as a summer intern. He did most of this work at Stanford but we include it here as a related and highly creative application of GANs to RL. The standard reinforcement learning setting usually requires one to design a reward function that describes the desired behavior of the agent. However, in practice this can sometimes involve expensive trial-and-error process to get the details right. In contrast, in imitation learning the agent learns from example demonstrations (for example provided by teleoperation in robotics), eliminating the need to design a reward&nbsp;function.</p>
+<div>
+  <div class="row">
+    <figure class="col">
+      <img class="w-100" src="./Generative Models_files/running_human.gif">
+    </figure>
+    <figure class="col">
+      <img class="w-100" src="./Generative Models_files/running_bug.gif">
+    </figure>
+  </div>
+</div>
+<p>Popular imitation approaches involve a two-stage pipeline: first learning a reward function, then running RL on that reward. Such a pipeline can be slow, and because it’s indirect, it is hard to guarantee that the resulting policy works well. This work shows how one can directly extract policies from data via a connection to GANs. As a result, this approach can be used to learn policies from expert demonstrations (without rewards) on hard <a href="https://gym.openai.com/" target="_blank" rel="noopener">OpenAI Gym</a> environments, such as <a href="https://gym.openai.com/envs/Ant-v1" target="_blank" rel="noopener">Ant</a> and <a href="https://gym.openai.com/envs/Humanoid-v1" target="_blank" rel="noopener">Humanoid</a>.</p>
+<hr>
+<h2 id="going-forward">Going forward</h2>
+<p>Generative models are a rapidly advancing area of research. As we continue to advance these models and scale up the training and the datasets, we can expect to eventually generate samples that depict entirely plausible images or videos. This may by itself find use in multiple applications, such as on-demand generated art, or Photoshop++ commands such as “make my smile wider”. Additional presently known applications include <a href="https://math.berkeley.edu/~sethian/2006/Applications/ImageProcessing/noiseremoval.html" target="_blank" rel="noopener">image denoising</a>, <a href="https://en.wikipedia.org/wiki/Inpainting" target="_blank" rel="noopener">inpainting</a>, <a href="https://en.wikipedia.org/wiki/Super-resolution_imaging" target="_blank" rel="noopener">super-resolution</a>, <a href="https://en.wikipedia.org/wiki/Structured_prediction" target="_blank" rel="noopener">structured prediction</a>, <a href="https://en.wikipedia.org/wiki/Reinforcement_learning#Exploration" target="_blank" rel="noopener">exploration</a> in reinforcement learning, and neural network <a href="http://image.diku.dk/shark/sphinx_pages/build/html/rest_sources/tutorials/algorithms/deep_denoising_autoencoder_network.html" target="_blank" rel="noopener">pretraining</a> in cases where labeled data is&nbsp;expensive.</p>
+<p>However, the deeper promise of this work is that, in the process of training generative models, we will endow the computer with an understanding of the world and what it is made up&nbsp;of.</p>
+<footer class="post-footer js-post-footer">
+    <hr>
+    <div class="row" id="authors">
+      <div class="col">Authors</div>
+      <div class="col js-post-footer-authors-list ">
+        <span class="post-author"><a class="fade" href="https://openai.com/blog/authors/andrej/">Andrej Karpathy</a></span><span class="post-author"><a class="fade" href="https://openai.com/blog/authors/pieter/">Pieter Abbeel</a></span><span class="post-author"><a class="fade" href="https://openai.com/blog/authors/greg/">Greg Brockman</a></span><span class="post-author"><a class="fade" href="https://openai.com/blog/authors/peter-chen/">Peter Chen</a></span><span class="post-author"><a class="fade" href="https://openai.com/blog/authors/vicki-cheung/">Vicki Cheung</a></span><span class="post-author"><a class="fade" href="https://openai.com/blog/authors/rocky/">Rocky Duan</a></span><span class="post-author"><a class="fade" href="https://openai.com/blog/authors/ian/">Ian Goodfellow</a></span><span class="post-author"><a class="fade" href="https://openai.com/blog/authors/diederik/">Durk Kingma</a></span><span class="post-author"><a class="fade" href="https://openai.com/blog/authors/jonathan-ho/">Jonathan Ho</a></span><span class="post-author"><a class="fade" href="https://openai.com/blog/authors/rein/">Rein Houthooft</a></span><span class="post-author"><a class="fade" href="https://openai.com/blog/authors/tim/">Tim Salimans</a></span><span class="post-author"><a class="fade" href="https://openai.com/blog/authors/john/">John Schulman</a></span><span class="post-author"><a class="fade" href="https://openai.com/blog/authors/ilya/">Ilya Sutskever</a></span><span class="post-author"><a class="fade" href="https://openai.com/blog/authors/wojciech/">Wojciech Zaremba</a></span>
+      </div>
+    </div>
+  
+    <hr>
+    <div class="row">
+      <div class="col">Cover Artwork</div>
+      <div class="col">Ludwig Pettersson</div>
+    </div>
+  </footer><!--kg-card-end: markdown-->
+    </section>
+  </div>
+</section>
+  
+
+</article>
+  
+
+  </main>
+  <footer>
+  <div class="container mt-2.5 pb-0.5 pb-lg-1">
+    <hr>
+    <nav class="py-0.5 color-fg-50 small-copy">
+      <div class="row">
+
+        <div class="col-12 col-md mb-0.5 col-lg mb-lg-0">
+          <ul class="list-inline">
+            <li class="d-block d-sm-inline mb-0.125 mb-sm-0"><a class="fade d-block d-sm-inline" href="https://openai.com/about/">About</a></li>
+            <li class="d-block d-sm-inline mb-0.125 mb-sm-0"><a class="fade d-block d-sm-inline" href="https://openai.com/progress/">Progress</a></li>
+            <li class="d-block d-sm-inline mb-0.125 mb-sm-0"><a class="fade d-block d-sm-inline" href="https://openai.com/resources/">Resources</a></li>
+            <li class="d-block d-sm-inline mb-0.125 mb-sm-0"><a class="fade d-block d-sm-inline" href="https://openai.com/blog/">Blog</a></li>
+            <li class="d-block d-sm-inline mb-0.125 mb-sm-0"><a class="fade d-block d-sm-inline" href="https://openai.com/charter/">Charter</a></li>
+            <li class="d-block d-sm-inline mb-0.125 mb-sm-0"><a class="fade d-block d-sm-inline" href="https://openai.com/jobs/">Jobs</a></li>
+            <li class="d-block d-sm-inline mb-0.125 mb-sm-0"><a class="fade d-block d-sm-inline" href="https://openai.com/press/">Press</a></li>
+          </ul>
+        </div>
+
+        <div class="col-12 mt-n0.2 mt-sm-0 col-sm-auto order-sm-last col-lg-2 order-lg-first">
+          <div class="d-flex align-items-center">
+            <a class="fade color-fg-40 mr-5/12 footer-icon footer-icon--twitter" href="https://twitter.com/openai" target="_blank" rel="noopener"><svg id="twitter" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 18"><path d="M7.86,17.93a12.84,12.84,0,0,0,13-12.63V5.11c0-.19,0-.39,0-.58A9.52,9.52,0,0,0,23.15,2.2a9.58,9.58,0,0,1-2.63.71,4.59,4.59,0,0,0,2-2.5,9.25,9.25,0,0,1-2.91,1.1A4.63,4.63,0,0,0,16.29.08a4.55,4.55,0,0,0-4.58,4.5,4.46,4.46,0,0,0,.12,1A13.05,13.05,0,0,1,2.4.91a4.46,4.46,0,0,0,1.42,6,4.52,4.52,0,0,1-2.07-.57v.06a4.53,4.53,0,0,0,3.67,4.42A5,5,0,0,1,4.21,11a4.12,4.12,0,0,1-.86-.09A4.55,4.55,0,0,0,7.62,14,9.34,9.34,0,0,1,.85,15.9a13.17,13.17,0,0,0,7,2"></path></svg></a>
+            <a class="fade color-fg-40 footer-icon footer-icon--facebook" href="https://www.facebook.com/openai.research" target="_blank" rel="noopener"><svg id="facebook" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M20,10A10,10,0,1,0,8.44,19.88v-7H5.9V10H8.44V7.8a3.52,3.52,0,0,1,3.77-3.89,15.72,15.72,0,0,1,2.24.19V6.56H13.19a1.45,1.45,0,0,0-1.63,1.56V10h2.78l-.45,2.89H11.56v7A10,10,0,0,0,20,10Z"></path></svg></a>
+          </div>
+        </div>
+
+
+      </div>
+    </nav>
+  </div>
+</footer>
+  <script type="text/javascript" src="./Generative Models_files/main.js"></script>
+  
+  
+  
+
+
+</body></html>
